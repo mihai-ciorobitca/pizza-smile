@@ -1,8 +1,8 @@
 const { Fragment, useState, useEffect } = React;
 
-// SLIDESHOW BURGERI
+// SLIDESHOW PIZZA
 function HeroBanner() {
-    const burgerImages = [
+    const pizzaImages = [
         "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600",
         "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600"
     ];
@@ -11,49 +11,45 @@ function HeroBanner() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % burgerImages.length);
+            setCurrentIndex(prev => (prev + 1) % pizzaImages.length);
         }, 3000);
         return () => clearInterval(interval);
     }, []);
 
     return React.createElement(
         "section",
-        { className: "bg-yellow-100 py-20 px-6 mt-12 rounded-t-3xl text-center" },
+        { className: "bg-yellow-100 py-20 px-6 mt-12 rounded-t-3xl text-center shadow-inner" },
         React.createElement(
             "h2",
-            { className: "ff-title text-5xl mb-6" },
-            React.createElement("span", { className: "text-green-500 mr-2" }, "Express"),
-            React.createElement("span", { className: "text-yellow-400 animate-bounce inline-block mx-1" }, "Food"),
-            React.createElement("span", { className: "text-gray mx-1" }, "&"),
-            React.createElement("span", { className: "text-red-500 animate-bounce inline-block mx-1" }, "Drinks")
+            { className: "ff-title text-5xl mb-6 text-brown-700" },
+            React.createElement("span", { className: "text-red-700 mr-2" }, "Pizza"),
+            React.createElement("span", { className: "text-orange-500 animate-bounce inline-block mx-1" }, "Smile"),
         ),
         React.createElement(
             "div",
-            { className: "mx-auto mb-4 w-full max-w-4xl rounded-2xl overflow-hidden relative bg-gray-100" },
+            { className: "mx-auto mb-4 w-full max-w-4xl rounded-2xl overflow-hidden relative bg-gray-100 shadow-lg" },
             React.createElement(
                 "div",
                 {
                     className: "flex transition-transform duration-1000",
                     style: { transform: `translateX(-${currentIndex * 100}%)` }
                 },
-                burgerImages.map((img, index) =>
+                pizzaImages.map((img, index) =>
                     React.createElement("img", {
                         key: index,
                         src: img,
-                        alt: `Burger ${index + 1}`,
-                        className: "w-full flex-shrink-0 object-contain"
+                        alt: `Pizza ${index + 1}`,
+                        className: "w-full flex-shrink-0 object-cover"
                     })
                 )
             )
         ),
         React.createElement(
             "p",
-            { className: "text-center text-lg max-w-2xl mx-auto text-gray-800" },
-            "Descoperă burgeri suculenți, kebab savuros, meniuri complete și salate proaspete. Livram la domiciliu!"
+            { className: "text-center text-lg max-w-2xl mx-auto text-brown-800" },
+            "Descoperă pizza delicioasă, burgeri suculenți și deserturi de casă. Livrăm direct la tine!"
         )
     );
-
-
 }
 
 function GoogleReviewsSlider({ placeId }) {
@@ -63,7 +59,6 @@ function GoogleReviewsSlider({ placeId }) {
     const [totalRatings, setTotalRatings] = React.useState(0);
 
     React.useEffect(() => {
-        if (!window.google || !google.maps) return;
         const map = new google.maps.Map(document.createElement("div"));
         const service = new google.maps.places.PlacesService(map);
 
@@ -74,10 +69,11 @@ function GoogleReviewsSlider({ placeId }) {
             },
             (place, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    const positiveReviews = (place.reviews || []).filter(r => r.rating >= 3);
+                    const positiveReviews = place.reviews.filter(r => r.rating >= 3);
                     setReviews(positiveReviews);
-                    setAverageRating(place.rating || 0);
-                    setTotalRatings(place.user_ratings_total || 0);
+
+                    setAverageRating(place.rating);
+                    setTotalRatings(place.user_ratings_total);
                 }
             }
         );
@@ -115,6 +111,7 @@ function GoogleReviewsSlider({ placeId }) {
         React.createElement(
             "div",
             { className: "max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-10" },
+            // Media recenziilor în interiorul cardului
             React.createElement(
                 "div",
                 { className: "text-center mb-6" },
@@ -134,6 +131,7 @@ function GoogleReviewsSlider({ placeId }) {
                     `(${totalRatings} recenzii reale)`
                 )
             ),
+            // Review individual
             React.createElement(
                 "div",
                 { className: "text-center" },
@@ -167,58 +165,111 @@ function GoogleReviewsSlider({ placeId }) {
     );
 }
 
+
+// MENIU PIZZA SMILE
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const placeholderImg = "https://images.unsplash.com/photo-1550547660-d9450f859349?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600";
+    const placeholderImg = "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600";
 
-    // MENIU actualizat din datele oferite
     const menuData = [
         {
-            category: "BURGERI",
+            category: "PIZZA",
             items: [
-                { name: "Big Double Burger", price: "40 LEI", weight: "250g", ingredients: "Carne de vită Angus, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Vită", price: "30 LEI", weight: "200g", ingredients: "Carne de vită Angus, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Porc", price: "28 LEI", weight: "300g", ingredients: "Carne de porc, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Pui", price: "27 LEI", weight: "320g", ingredients: "Carne de pui, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Crispy", price: "27 LEI", weight: "300g", ingredients: "Crispy de pui, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Șnitel", price: "27 LEI", weight: "380g", ingredients: "Șnițel de pui, chiflă, salată, brânză cheddar, castraveți murați, roșii, barbeque, maioneză" },
-                { name: "Burger Vegetal", price: "22 LEI", weight: "300g", ingredients: "Mix de legume în crustă de pesmet, chiflă, salată, castraveți murați, roșii, maioneză vegetală" },
-                { name: "Burger Somon", price: "35 LEI", weight: "300g", ingredients: "Somon, chiflă, maioneză vegetală, castraveți murați, roșii, ceapă roșie" }
+                { name: "Pizza Casei", price: "28 / 35 LEI" },
+                { name: "Pizza Napoli", price: "28 / 35 LEI" },
+                { name: "Pizza țărănească", price: "28 / 35 LEI" },
+                { name: "Pizza Quattro Formaggi", price: "28 / 35 LEI" },
+                { name: "Pizza Prosciutto Crudo", price: "28 / 35 LEI" },
+                { name: "Pizza Salami", price: "27 / 32 LEI" },
+                { name: "Pizza Quatro Stagione", price: "27 / 32 LEI" },
+                { name: "Pizza Capriciosa", price: "27 / 32 LEI" },
+                { name: "Pizza O Sole Mio", price: "27 / 32 LEI" },
+                { name: "Pizza Pesci", price: "27 / 32 LEI" },
+                { name: "Pizza Funghi", price: "27 / 32 LEI" }
             ]
         },
         {
-            category: "KEBAB",
+            category: "CARNE",
             items: [
-                { name: "Kebab Pui la Farfurie", price: "25 LEI", ingredients: "" },
-                { name: "Kebab Porc la Farfurie", price: "25 LEI", ingredients: "" },
-                { name: "Kebab Porc la Lipie", price: "28 LEI", ingredients: "" },
-                { name: "Kebab MINT la Lipie", price: "25 LEI", ingredients: "" },
-                { name: "Kebab MINT la Farfurie", price: "25 LEI", ingredients: "" },
-                { name: "Falafel la Farfurie", price: "20 LEI", ingredients: "" },
-                { name: "Falafel la Lipie", price: "17 LEI", ingredients: "" }
+                { name: "Hamburger 300 g", price: "18 LEI" },
+                { name: "Cheeseburger 300 g", price: "18 LEI" },
+                { name: "Cartofi prăjiți 250 g", price: "11 LEI" },
+                { name: "Smile burger 500 g", price: "37 LEI" },
+                { name: "Chicken burger 300 g", price: "30 LEI" },
+                { name: "Crispy chicken 350 g", price: "37 LEI" },
+                { name: "Aripioare crispy picante 450 g", price: "37 LEI" },
+                { name: "Coaste de porc cu sos barbecue 550 g", price: "55 LEI" }
             ]
         },
         {
-            category: "MENIURI",
+            category: "DESERT",
             items: [
-                { name: "Meniu Șnitel", price: "28 LEI", ingredients: "" },
-                { name: "Meniu Crispy", price: "28 LEI", ingredients: "" },
-                { name: "Meniu Aripioare", price: "28 LEI", ingredients: "" },
-                { name: "Meniu Ceafă", price: "35 LEI", ingredients: "" },
-                { name: "Meniu Piept", price: "32 LEI", ingredients: "" },
-                { name: "Meniu Pulpă", price: "32 LEI", ingredients: "" },
-                { name: "Meniu Mix Grill", price: "60 LEI", ingredients: "" }
+                { name: "Brownie 150 g", price: "20 LEI" },
+                { name: "Lava cake 180 g", price: "22 LEI" },
+                { name: "Tiramisu 130 g", price: "20 LEI" },
+                { name: "Înghețată 150 g", price: "15 LEI" }
             ]
         },
         {
-            category: "SALATE",
+            category: "BERE",
             items: [
-                { name: "Salată cu Pui", price: "27 LEI", ingredients: "" },
-                { name: "Salată cu Crispy", price: "27 LEI", ingredients: "" },
-                { name: "Salată cu Ton", price: "27 LEI", ingredients: "" },
-                { name: "Salată Grecească", price: "22 LEI", ingredients: "" },
-                { name: "Salată Asortată", price: "10 LEI", ingredients: "" },
-                { name: "Salată de Murături", price: "10 LEI", ingredients: "" }
+                { name: "Heineken 400 ml", price: "11 LEI" },
+                { name: "Heineken Silver 400 ml", price: "11 LEI" },
+                { name: "Silas Moretti 330 ml", price: "8 LEI" },
+                { name: "Birra Moretti 500 ml", price: "10 LEI" },
+                { name: "Ciuc Premium Lager 500 ml", price: "9 LEI" },
+                { name: "Golden Brau 500 ml", price: "8 LEI" },
+                { name: "Silva Strong Dark Lager 500 ml", price: "13 LEI" },
+                { name: "Desperados 400 ml", price: "16 LEI" },
+                { name: "Ciuc Premium Lager Draught 400 ml", price: "8 LEI" },
+                { name: "Heineken 0,0% 330 ml", price: "11 LEI" },
+                { name: "Ciuc Radler Lemon 0,0% 500 ml", price: "10 LEI" },
+                { name: "Ciuc Radler Zmeură 0,0% 500 ml", price: "10 LEI" }
+            ]
+        },
+        {
+            category: "RĂCORITOARE",
+            items: [
+                { name: "Pepsi Cola / Pepsi Twist / Mirinda / 7UP / Prigat suc / Mountain Dew 250–500 ml", price: "8–11 LEI" },
+                { name: "Pepsi Max Zero Zahăr 500 ml", price: "11 LEI" },
+                { name: "Ice Tea Lipton 500 ml (lămâie, piersică, zmeură, fructul pasiunii)", price: "11 LEI" },
+                { name: "Nectar & Juice Prigat 250 ml (Căpșună-Banană, Piersici, Kiwi, Portocale)", price: "11 LEI" },
+                { name: "Natural 500 ml", price: "11 LEI" },
+                { name: "Cătină Yugo 250 ml", price: "15 LEI" },
+                { name: "Aloe Vera 500 ml", price: "14 LEI" },
+                { name: "Fresh natural 330 ml", price: "15 LEI" },
+                { name: "Limonadă, Mere, Portocale, Grapefruit, Pink lemonade, Mint lemonade, Socată", price: "" },
+                { name: "Aqua Carpatica plată/minerală 330–750 ml", price: "8–13 LEI" },
+                { name: "Everess Tonic 250 ml", price: "8 LEI" },
+                { name: "Rockstar Original / Xdurance 250 ml", price: "8 LEI" },
+                { name: "Hard Seltzer Wet 330 ml (4,5%) – Mango, Grapefruit, Lime și Mentă, Piersică, Zmeură", price: "12 LEI" }
+            ]
+        },
+        {
+            category: "VINURI",
+            items: [
+                { name: "Purcari Chardonnay / Roze", price: "70 LEI" },
+                { name: "Jidvei Mysterium Blanc / Rose", price: "70 LEI" },
+                { name: "Dry Muscat “Fata în iarbă”", price: "36 LEI" },
+                { name: "Jidvei Roze Grigorescu / Fetească Regală", price: "36 LEI" },
+                { name: "Riunite Lambrusco Rose", price: "45 LEI" },
+                { name: "Cricova Chardonnay / “Orasul subteran”", price: "30–40 LEI" },
+                { name: "Grasă de Cotnari / Tămârnave Cotnari", price: "33 LEI" }
+            ]
+        },
+        {
+            category: "ALCOOLICE",
+            items: [
+                { name: "Jack Daniel’s", price: "24 LEI" },
+                { name: "The Famous Grouse", price: "21 LEI" },
+                { name: "J&B Rare", price: "22 LEI" },
+                { name: "Jägermeister", price: "16 LEI" },
+                { name: "Alexandrion 5* / 7*", price: "14–18 LEI" },
+                { name: "Angelli", price: "18 LEI" },
+                { name: "Bicken’s Gin / Wembley Gin", price: "16–18 LEI" },
+                { name: "Absolut / Finlandia", price: "16–18 LEI" },
+                { name: "Stalinskaya", price: "12 LEI" },
+                { name: "Afinată Amigo / Vișinată Amigo", price: "12 LEI" }
             ]
         }
     ];
@@ -237,17 +288,14 @@ function App() {
         // NAVBAR
         React.createElement("nav", { className: "fixed top-0 w-full bg-white shadow z-50" },
             React.createElement("div", { className: "max-w-6xl mx-auto px-6 py-4 flex justify-between items-center" },
-                React.createElement("h1", { className: "ff-title text-3xl text-red-500" }, "Express Food & Drinks"),
+                React.createElement("h1", { className: "ff-title text-3xl text-red-700" }, "Pizza Smile"),
                 React.createElement("div", { className: "flex items-center gap-6" },
-                    React.createElement("div", { className: "hidden md:block text-sm text-gray-700" },
-                        React.createElement("span", null, "Livram la domiciliu! ")
-                    ),
-                    React.createElement("button", { className: "md:hidden text-gray-700 text-3xl", onClick: () => setMenuOpen(true) }, "☰")
+                    React.createElement("button", { className: "md:hidden text-brown-800 text-3xl", onClick: () => setMenuOpen(true) }, "☰")
                 ),
                 React.createElement("ul", { className: "hidden md:flex gap-6" },
                     sections.map(sec =>
                         React.createElement("li", { key: sec },
-                            React.createElement("a", { href: `#${sec}`, className: "text-gray-700 hover:text-red-500 font-semibold block py-2" }, sec)
+                            React.createElement("a", { href: `#${sec}`, className: "text-brown-800 hover:text-red-700 font-semibold block py-2" }, sec)
                         )
                     )
                 )
@@ -264,7 +312,7 @@ function App() {
 
                 React.createElement(
                     "h2",
-                    { className: "ff-title text-4xl mb-8 text-center text-red-600" },
+                    { className: "ff-title text-4xl mb-8 text-center text-red-700" },
                     category.category
                 ),
 
@@ -278,7 +326,7 @@ function App() {
                             {
                                 key: item.name,
                                 className:
-                                    "bg-white shadow-lg rounded-2xl p-4 hover:shadow-2xl transition transform hover:scale-105 flex flex-col justify-between"
+                                    "bg-cream shadow-lg rounded-2xl p-4 hover:shadow-2xl transition transform hover:scale-105 flex flex-col justify-between border border-brown-200"
                             },
 
                             // imagine
@@ -288,26 +336,16 @@ function App() {
                                 className: "w-full h-48 object-cover rounded-xl mb-4"
                             }),
 
-                            // TITLU + GRAMAJ (LA FINAL)
+                            // TITLU + PREȚ
                             React.createElement(
                                 "h3",
-                                { className: "text-2xl ff-title text-gray-900 text-center mb-2" },
-                                item.weight
-                                    ? `${item.name} (${item.weight})`
-                                    : item.name
+                                { className: "text-2xl ff-title text-brown-900 text-center mb-2" },
+                                item.name
                             ),
 
-                            // INGREDIENTE
                             React.createElement(
                                 "p",
-                                { className: "text-gray-700 text-center mb-4" },
-                                item.ingredients || "\u00A0"
-                            ),
-
-                            // PREȚ LA FINAL
-                            React.createElement(
-                                "p",
-                                { className: "text-red-500 font-bold text-xl text-center mt-auto" },
+                                { className: "text-red-700 font-bold text-xl text-center mt-auto" },
                                 item.price || ""
                             )
                         )
@@ -316,31 +354,52 @@ function App() {
             )
         ),
 
-
-        // CONTACT
+        // CONTACT - Modern & Clean
         React.createElement("section", { className: "max-w-4xl mx-auto px-6 py-16" },
             React.createElement("h2", { className: "ff-title text-5xl text-center mb-8 text-red-600" }, "Contact"),
             React.createElement("div", { className: "bg-white p-10 shadow-lg rounded-2xl border border-gray-200 grid md:grid-cols-2 gap-6" },
 
+                // Contact Info
                 React.createElement("div", null,
+                    // Locație
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3" },
-                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", alt: "Locație", className: "w-6 h-6" }),
-                        "Târgu Neamț, Str. Principală 10"
+                        React.createElement("img", {
+                            src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // locație
+                            alt: "Locație",
+                            className: "w-6 h-6"
+                        }),
+                        "Târgu Neamț, zona Centrală"
                     ),
+                    // Telefon
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3" },
-                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/159/159832.png", alt: "Telefon", className: "w-6 h-6" }),
-                        React.createElement("span", null, "0771 334 379")
+                        React.createElement("img", {
+                            src: "https://cdn-icons-png.flaticon.com/512/159/159832.png", // telefon mai modern
+                            alt: "Telefon",
+                            className: "w-6 h-6"
+                        }),
+                        "0740 123 456"
                     ),
+                    // Program
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3 whitespace-pre-line" },
-                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/565/565313.png", alt: "Program", className: "w-6 h-6" }),
-                        "Luni – Vineri: 10:00 – 22:00\nSâmbătă – Duminică: 12:00 – 22:00"
+                        React.createElement("img", {
+                            src: "https://cdn-icons-png.flaticon.com/512/565/565313.png", // ceas modern
+                            alt: "Program",
+                            className: "w-6 h-6"
+                        }),
+                        "Luni – Vineri: 08:00 – 20:00\nSâmbătă – Duminică: 10:00 – 16:00"
                     ),
+                    // Email
                     React.createElement("p", { className: "text-lg flex items-center gap-3" },
-                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/732/732200.png", alt: "Email", className: "w-6 h-6" }),
-                        "contact@express-food-drinks.ro"
-                    ),
+                        React.createElement("img", {
+                            src: "https://cdn-icons-png.flaticon.com/512/732/732200.png", // email
+                            alt: "Email",
+                            className: "w-6 h-6"
+                        }),
+                        "contact@pizza-smile.ro"
+                    )
                 ),
 
+                // Harta
                 React.createElement("div", null,
                     React.createElement("iframe", {
                         className: "w-full h-64 rounded-xl border-0",
@@ -352,21 +411,29 @@ function App() {
             )
         ),
 
+
         // Reviews
-        React.createElement(GoogleReviewsSlider, { placeId: "EjpTdHJhZGEgTWloYWlsIEtvZ8SDbG5pY2VhbnUsIDYxNTIwMCBUw6JyZ3UgTmVhbcibLCBSb21hbmlhIi4qLAoUChIJnUw23ThHNUcROg7HxWyRCMQSFAoSCaVr7rI9RzVHEVF1hFWGm" }),
+        React.createElement(GoogleReviewsSlider, { placeId: "ChIJ7zbEdDpHNUcRiX1o_tyEVAA" }),
+
 
         // FOOTER
         React.createElement("footer", { className: "bg-gray-800 text-white py-12" },
             React.createElement("div", { className: "max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8" },
+
+                // Brand
                 React.createElement("div", { className: "text-center md:text-left" },
-                    React.createElement("h1", { className: "text-2xl font-bold mb-1" }, "Express Food & Drinks"),
-                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Fast Food Târgu Neamț")
+                    React.createElement("h1", { className: "text-2xl font-bold mb-1" }, "Pizza Smile"),
+                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Pizzerie Târgu Neamț")
                 ),
+
+                // Orar
                 React.createElement("div", { className: "text-center" },
                     React.createElement("h2", { className: "text-lg font-semibold mb-1" }, "Program"),
-                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Luni – Vineri: 10:00 – 22:00"),
-                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Sâmbătă – Duminică: 12:00 – 22:00")
+                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Luni – Vineri: 08:00 – 20:00"),
+                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Sâmbătă – Duminică: 10:00 – 16:00")
                 ),
+
+                // Social Media - Clean React Version
                 React.createElement("div", { className: "text-center space-y-4" },
                     React.createElement("h2", { className: "text-xl font-bold uppercase tracking-wide" }, "URMĂREȘTE-NE"),
                     React.createElement("div", { className: "flex justify-center gap-6" },
@@ -378,9 +445,12 @@ function App() {
                         )
                     )
                 )
+
             ),
+
+            // Copyright
             React.createElement("div", { className: "mt-8 text-center text-gray-400 text-sm" },
-                "© 2025 Express Food & Drinks. Toate drepturile rezervate."
+                "© 2025 Pizza Smile. Toate drepturile rezervate."
             )
         ),
 
@@ -389,7 +459,7 @@ function App() {
             sections.map(sec =>
                 React.createElement("button", {
                     key: sec,
-                    className: "text-3xl text-white font-bold hover:text-yellow-400 transition",
+                    className: "text-3xl text-white font-bold hover:text-orange-400 transition",
                     onClick: () => handleScrollTo(sec)
                 }, sec)
             ),
