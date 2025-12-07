@@ -67,6 +67,8 @@ function PlayZone() {
 function GoogleReviewsSlider({ placeId }) {
     const [reviews, setReviews] = React.useState([]);
     const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [averageRating, setAverageRating] = React.useState(0);
+    const [totalRatings, setTotalRatings] = React.useState(0);
 
     React.useEffect(() => {
         const map = new google.maps.Map(document.createElement("div"));
@@ -79,8 +81,11 @@ function GoogleReviewsSlider({ placeId }) {
             },
             (place, status) => {
                 if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    const fiveStarReviews = place.reviews.filter(r => r.rating >= 3);
-                    setReviews(fiveStarReviews);
+                    const positiveReviews = place.reviews.filter(r => r.rating >= 3);
+                    setReviews(positiveReviews);
+
+                    setAverageRating(place.rating);
+                    setTotalRatings(place.user_ratings_total);
                 }
             }
         );
@@ -98,9 +103,18 @@ function GoogleReviewsSlider({ placeId }) {
 
     const currentReview = reviews[currentIndex];
 
+    const renderStars = (rating) =>
+        Array.from({ length: 5 }, (_, i) =>
+            React.createElement("span", {
+                key: i,
+                className: `text-2xl ${i < rating ? "text-yellow-400" : "text-gray-300"}`,
+                dangerouslySetInnerHTML: { __html: "&#9733;" }
+            })
+        );
+
     return React.createElement(
         "section",
-        { className: "px-4 sm:px-6 lg:px-12 py-16" }, // padding lateral pentru margini vizibile
+        { className: "px-4 sm:px-6 lg:px-12 py-16" },
         React.createElement(
             "h2",
             { className: "ff-title text-5xl text-center mb-8 text-red-600" },
@@ -108,7 +122,28 @@ function GoogleReviewsSlider({ placeId }) {
         ),
         React.createElement(
             "div",
-            { className: "max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-10" }, // card mare, centrat
+            { className: "max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-10" },
+            // Media recenziilor în interiorul cardului
+            React.createElement(
+                "div",
+                { className: "text-center mb-6" },
+                React.createElement(
+                    "div",
+                    { className: "flex items-center justify-center mb-2" },
+                    renderStars(Math.round(averageRating))
+                ),
+                React.createElement(
+                    "p",
+                    { className: "text-gray-700 font-semibold" },
+                    `${averageRating.toFixed(1)} din 5`
+                ),
+                React.createElement(
+                    "p",
+                    { className: "text-gray-400 text-sm" },
+                    `(${totalRatings} recenzii reale)`
+                )
+            ),
+            // Review individual
             React.createElement(
                 "div",
                 { className: "text-center" },
@@ -120,13 +155,7 @@ function GoogleReviewsSlider({ placeId }) {
                 React.createElement(
                     "div",
                     { className: "flex justify-center mb-4" },
-                    Array.from({ length: currentReview.rating }, (_, i) =>
-                        React.createElement("span", {
-                            key: i,
-                            className: "text-yellow-400 text-2xl",
-                            dangerouslySetInnerHTML: { __html: "&#9733;" } // ★
-                        })
-                    )
+                    renderStars(currentReview.rating)
                 ),
                 React.createElement(
                     "p",
@@ -147,6 +176,7 @@ function GoogleReviewsSlider({ placeId }) {
         )
     );
 }
+
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
