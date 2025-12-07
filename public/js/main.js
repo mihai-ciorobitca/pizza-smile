@@ -239,7 +239,7 @@ function App() {
             React.createElement("div", { className: "max-w-6xl mx-auto px-6 py-4 flex justify-between items-center" },
                 React.createElement("h1", { className: "ff-title text-3xl text-red-500" }, "Express Food & Drinks"),
                 React.createElement("div", { className: "flex items-center gap-6" },
-                    React.createElement("div", { className: "hiden md:block text-sm text-gray-700" },
+                    React.createElement("div", { className: "hidden md:block text-sm text-gray-700" },
                         React.createElement("span", null, "Livram la domiciliu! ")
                     ),
                     React.createElement("button", { className: "md:hidden text-gray-700 text-3xl", onClick: () => setMenuOpen(true) }, "☰")
