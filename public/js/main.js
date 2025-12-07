@@ -1,55 +1,47 @@
-
 const { Fragment, useState, useEffect } = React;
 
-
-// ZONA DE JOACĂ (sus) – SLIDESHOW
-function PlayZone() {
-    const gameImages = [
+// SLIDESHOW BURGERI
+function HeroBanner() {
+    const burgerImages = [
         "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600",
         "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600",
         "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600"
     ];
 
-    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentIndex(prev => (prev + 1) % gameImages.length);
+            setCurrentIndex(prev => (prev + 1) % burgerImages.length);
         }, 3000);
         return () => clearInterval(interval);
     }, []);
 
     return React.createElement(
         "section",
-        { className: "bg-yellow-100 py-20 px-6 mt-12 rounded-t-3xl" },
-        // titlu
+        { className: "bg-yellow-100 py-20 px-6 mt-12 rounded-t-3xl text-center" },
+        // titlu animat
         React.createElement(
             "h2",
-            { className: "ff-title text-5xl text-center mb-6 text-red-500" },
-            React.createElement(
-                "span",
-                { className: "text-green-500 animate-bounce inline-block mr-2" },
-                "NOU!"
-            ),
-            "Mănânci, te joci, te distrezi!"
+            { className: "ff-title text-5xl mb-6" },
+            React.createElement("span", { className: "text-yellow-400 mr-2" }, "Burger"),
+            React.createElement("span", { className: "text-red-500 animate-bounce inline-block" }, "Time")
         ),
-        // slider container
+        // slider
         React.createElement(
             "div",
-            {
-                className: "mx-auto mb-4 w-full max-w-4xl rounded-2xl overflow-hidden relative bg-gray-100"
-            },
+            { className: "mx-auto mb-4 w-full max-w-4xl rounded-2xl overflow-hidden relative bg-gray-100" },
             React.createElement(
                 "div",
                 {
                     className: "flex transition-transform duration-1000",
                     style: { transform: `translateX(-${currentIndex * 100}%)` }
                 },
-                gameImages.map((img, index) =>
+                burgerImages.map((img, index) =>
                     React.createElement("img", {
                         key: index,
                         src: img,
-                        alt: `Joc ${index + 1}`,
+                        alt: `Burger ${index + 1}`,
                         className: "w-full flex-shrink-0 object-contain"
                     })
                 )
@@ -59,7 +51,7 @@ function PlayZone() {
         React.createElement(
             "p",
             { className: "text-center text-lg max-w-2xl mx-auto text-gray-800" },
-            "La CuSos ai acces la jocuri de societate, o zonă cosy și un vibe relaxant. Perfect pentru prieteni, familie și energie bună."
+            "Descoperă burgeri suculenți și meniuri delicioase. Cartofi crocanți și băuturi răcoritoare completează experiența Burger Time!"
         )
     );
 }
@@ -180,58 +172,29 @@ function GoogleReviewsSlider({ placeId }) {
 
 function App() {
     const [menuOpen, setMenuOpen] = useState(false);
-    const placeholderImg = "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600";
+    const placeholderImg = "https://images.unsplash.com/photo-1550547660-d9450f859349?crop=entropy&cs=tinysrgb&fit=max&h=400&w=600";
 
     const menuData = [
         {
-            category: "KEBAB", items: [
-                { name: "Piatto Kebab (550g)", price: "21 lei", desc: "carne shaorma, cartofi prăjiți, salată, sosuri, castraveți, ceapă, roșii" },
-                { name: "Kebab (400g / 330g / 290g)", price: "18 / 16 / 14 lei", desc: "pită mare / medie / mică, carne shaorma, salată, sosuri, castraveți, ceapă, roșii" },
-                { name: "Roll Kebab (500g / 400g / 300g)", price: "20 / 17 / 14 lei", desc: "lipie mare / medie / mică, carne shaorma, salată, castraveți, ceapă, sosuri" },
-                { name: "Crispy Kebab (350g)", price: "17 lei", desc: "3 buc. crispy stick, shaorma, verdețe, 2 sosuri" },
-                { name: "Crispy Roll (350g)", price: "17 lei", desc: "3 buc. crispy, salată verde, castraveți, ceapă, 2 sosuri" },
-                { name: "Hamburger (350g)", price: "12 lei", desc: "pită arabă, hamburger vegetal, salată verde, roșii, castraveți, ceapă" },
-                { name: "Sandwich Pui (330g)", price: "17 / 13 lei", desc: "1 piept pui / piept pui mic, pită, salată, roșii, castraveți, ceapă, 1 sos" },
+            category: "MENIU BURGERI", items: [
+                { name: "CheeseBurger", price: "Singur: 20,90 lei / Combo: 31 lei", desc: "Chiflă cu susan, carne de vită 100 g, cașcaval, salată iceberg, roșii, ceapă, castraveți murați, sos BurgerTime, maioneză, ketchup" },
+                { name: "Double CheeseBurger", price: "Singur: 29,90 lei / Combo: 39 lei", desc: "Chiflă cu susan, 2 x carne de vită 100 g, 2 felii cașcaval, salată iceberg, roșii, ceapă, castraveți murați, sos BurgerTime, maioneză, ketchup" },
+                { name: "X-Burger", price: "Singur: 25,90 lei / Combo: 35 lei", desc: "Chiflă cu susan, carne de vită 150 g, cașcaval, bacon crocant, salată iceberg, roșii, ceapă roșie, castraveți murați, sos BurgerTime, maioneză" },
+                { name: "CrispyBurger Mare", price: "Singur: 19,90 lei / Combo: 29 lei", desc: "Chiflă cu susan, piept de pui crispy, salată iceberg, maioneză, sos dulce-acrișor" },
+                { name: "CrispyBurger Mic", price: "Singur: 16,90 lei / Combo: ~26 lei", desc: "Aceeași compoziție ca mai sus, porție mai mică de pui" },
             ]
         },
         {
-            category: "MENIURI", items: [
-                { name: "Meniu Kebab + Cola (380g)", price: "18 lei", desc: "—" },
-                { name: "Meniu Crispy 3 buc. (400g)", price: "17 lei", desc: "crispy stick, cartofi, pită + 1 sos" },
-                { name: "Meniu Crispy 5 buc. (570g)", price: "20 lei", desc: "crispy, salată, cartofi, pită + 2 sosuri" },
-                { name: "Meniu Șnitel Pui (430g)", price: "19 lei", desc: "1 șnitel de pui, cartofi, salată, pită + 1 sos" },
-                { name: "Meniu Nuggets (400g)", price: "19 lei", desc: "8 buc. nuggets, cartofi, salată, pită + 1 sos" },
-                { name: "Meniu Aripioare (400g)", price: "20 lei", desc: "5 bucăți aripioare, cartofi, salată, pită + 1 sos" },
-                { name: "Meniu Kids (300g)", price: "17 lei", desc: "nuggets, cartofi, sos" },
-            ]
-        },
-        {
-            category: "SALATE", items: [
-                { name: "Salată Cusos / Crispy (300g / 350g)", price: "16 lei", desc: "carne rotațivă / 3 bucăți crispy, salată verde, roșii, castraveți, ceapă, măsline, feta, sos tzatziki" },
-            ]
-        },
-        {
-            category: "VEGETARIAN", items: [
-                { name: "Piatto Falafel 6 buc. (550g)", price: "20 lei (mare)", desc: "—" },
-                { name: "Roll Falafel 4 buc. (400g)", price: "19 lei", desc: "lipie, falafel, cartofi, salată, roșii, castraveți, ceapă, sos" },
-                { name: "Sandwich (350g)", price: "14 lei", desc: "pită, ardei vegetarian, salată, roșii, castraveți, ceapă, sos" },
-                { name: "Hamburger (350g)", price: "14 lei", desc: "pită, hamburger vegetal, cartofi, salată, roșii, castraveți, ceapă" },
-            ]
-        },
-        {
-            category: "GARNITURI", items: [
-                { name: "Cartofi pai (230g)", price: "7 lei", desc: "—" },
-                { name: "Pitã", price: "2 lei", desc: "—" },
-                { name: "Sos extra", price: "2 lei", desc: "original, usturoi, picant, dressing, ketchup" },
+            category: "CARTOFI PRAJITI", items: [
+                { name: "Cartofi prăjiți Mică", price: "9 lei", desc: "Porție mică, crocanți și delicioși" },
+                { name: "Cartofi prăjiți Mare", price: "12 lei", desc: "Porție mare, crocanți și delicioși" },
             ]
         },
         {
             category: "BĂUTURI", items: [
-                { name: "Sucuri naturale", price: "6 lei", desc: "—" },
-                { name: "Sucuri", price: "10 lei", desc: "—" },
-                { name: "Limonadă", price: "10 lei", desc: "—" },
-                { name: "Apă", price: "4 lei", desc: "—" },
-                { name: "Băuturi calde", price: "5 lei", desc: "—" },
+                { name: "Băuturi răcoritoare 0,4 l", price: "4,90 lei", desc: "Cola, Fanta, Sprite" },
+                { name: "Băuturi răcoritoare 0,5 l", price: "6 lei", desc: "Cola, Fanta, Sprite" },
+                { name: "Băuturi calde", price: "8-14 lei", desc: "Cafea, cappuccino, ceai etc." },
             ]
         }
     ];
@@ -250,7 +213,7 @@ function App() {
         // NAVBAR
         React.createElement("nav", { className: "fixed top-0 w-full bg-white shadow z-50" },
             React.createElement("div", { className: "max-w-6xl mx-auto px-6 py-4 flex justify-between items-center" },
-                React.createElement("h1", { className: "ff-title text-3xl text-red-500" }, "CuSos"),
+                React.createElement("h1", { className: "ff-title text-3xl text-red-500" }, "Burger Time"),
                 React.createElement("button", { className: "md:hidden text-gray-700 text-3xl", onClick: () => setMenuOpen(true) }, "☰"),
                 React.createElement("ul", { className: "hidden md:flex gap-6" },
                     sections.map(sec =>
@@ -262,7 +225,7 @@ function App() {
             )
         ),
 
-        React.createElement(PlayZone),
+        React.createElement(HeroBanner),
 
         // SECTIUNI MENIU
         menuData.map(category =>
@@ -281,52 +244,30 @@ function App() {
             )
         ),
 
-        // CONTACT - Modern & Clean
+        // CONTACT
         React.createElement("section", { className: "max-w-4xl mx-auto px-6 py-16" },
             React.createElement("h2", { className: "ff-title text-5xl text-center mb-8 text-red-600" }, "Contact"),
             React.createElement("div", { className: "bg-white p-10 shadow-lg rounded-2xl border border-gray-200 grid md:grid-cols-2 gap-6" },
 
-                // Contact Info
                 React.createElement("div", null,
-                    // Locație
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3" },
-                        React.createElement("img", {
-                            src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", // locație
-                            alt: "Locație",
-                            className: "w-6 h-6"
-                        }),
-                        "Târgu Neamț, zona Centrală"
+                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/684/684908.png", alt: "Locație", className: "w-6 h-6" }),
+                        "Târgu Neamț, Str. Principală 10"
                     ),
-                    // Telefon
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3" },
-                        React.createElement("img", {
-                            src: "https://cdn-icons-png.flaticon.com/512/159/159832.png", // telefon mai modern
-                            alt: "Telefon",
-                            className: "w-6 h-6"
-                        }),
-                        "0740 123 456"
+                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/159/159832.png", alt: "Telefon", className: "w-6 h-6" }),
+                        "0740 987 654"
                     ),
-                    // Program
                     React.createElement("p", { className: "text-lg mb-4 flex items-center gap-3 whitespace-pre-line" },
-                        React.createElement("img", {
-                            src: "https://cdn-icons-png.flaticon.com/512/565/565313.png", // ceas modern
-                            alt: "Program",
-                            className: "w-6 h-6"
-                        }),
-                        "Luni – Vineri: 08:00 – 20:00\nSâmbătă – Duminică: 10:00 – 16:00"
+                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/565/565313.png", alt: "Program", className: "w-6 h-6" }),
+                        "Luni – Vineri: 10:00 – 22:00\nSâmbătă – Duminică: 12:00 – 22:00"
                     ),
-                    // Email
                     React.createElement("p", { className: "text-lg flex items-center gap-3" },
-                        React.createElement("img", {
-                            src: "https://cdn-icons-png.flaticon.com/512/732/732200.png", // email
-                            alt: "Email",
-                            className: "w-6 h-6"
-                        }),
-                        "contact@cusos.ro"
+                        React.createElement("img", { src: "https://cdn-icons-png.flaticon.com/512/732/732200.png", alt: "Email", className: "w-6 h-6" }),
+                        "contact@burgertime.ro"
                     )
                 ),
 
-                // Harta
                 React.createElement("div", null,
                     React.createElement("iframe", {
                         className: "w-full h-64 rounded-xl border-0",
@@ -338,28 +279,22 @@ function App() {
             )
         ),
 
+         // Reviews
+        React.createElement(GoogleReviewsSlider, { placeId: "ChIJZUUJMX9HNUcR45rsgPTiKuM" }),
 
-        // Reviews
-        React.createElement(GoogleReviewsSlider, { placeId: "ChIJsfm07DlHNUcRX5dRXMY4WZU" }),
 
         // FOOTER
         React.createElement("footer", { className: "bg-gray-800 text-white py-12" },
             React.createElement("div", { className: "max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8" },
-
-                // Brand
                 React.createElement("div", { className: "text-center md:text-left" },
-                    React.createElement("h1", { className: "text-2xl font-bold mb-1" }, "CuSos"),
+                    React.createElement("h1", { className: "text-2xl font-bold mb-1" }, "Burger Time"),
                     React.createElement("p", { className: "text-gray-300 text-sm" }, "Fast Food Târgu Neamț")
                 ),
-
-                // Orar
                 React.createElement("div", { className: "text-center" },
                     React.createElement("h2", { className: "text-lg font-semibold mb-1" }, "Program"),
-                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Luni – Vineri: 08:00 – 20:00"),
-                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Sâmbătă – Duminică: 10:00 – 16:00")
+                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Luni – Vineri: 10:00 – 22:00"),
+                    React.createElement("p", { className: "text-gray-300 text-sm" }, "Sâmbătă – Duminică: 12:00 – 22:00")
                 ),
-
-                // Social Media - Clean React Version
                 React.createElement("div", { className: "text-center space-y-4" },
                     React.createElement("h2", { className: "text-xl font-bold uppercase tracking-wide" }, "URMĂREȘTE-NE"),
                     React.createElement("div", { className: "flex justify-center gap-6" },
@@ -371,12 +306,9 @@ function App() {
                         )
                     )
                 )
-
             ),
-
-            // Copyright
             React.createElement("div", { className: "mt-8 text-center text-gray-400 text-sm" },
-                "© 2025 CuSos. Toate drepturile rezervate."
+                "© 2025 Burger Time. Toate drepturile rezervate."
             )
         ),
 
